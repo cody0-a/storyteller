@@ -1,0 +1,13 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+    <div clasName="">
+        <h2 className="title text-center">Create an Account</h2>
+         <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Register">
+        </form>
+    </div>
+    
+{% endblock %}
