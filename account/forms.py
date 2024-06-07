@@ -1,4 +1,4 @@
-from .models import UserProfile
+from .models import *
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -62,4 +62,14 @@ class LoginForm(forms.Form):
         model = User
         fields = ('username', 'password')
 
-    
+class StoryCommentForm(forms.ModelForm):
+    class Meta:
+        model = StoryComment
+        fields =['comment_text']
+
+
+class StoryForm(forms.ModelForm):
+    class Meta:
+        model = Story
+        fields =['title', 'content']
+        

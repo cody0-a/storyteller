@@ -1,0 +1,6 @@
+categories = models.ManyToManyField('Category', related_name='stories')    tags = models.CharField(max_length=200)
+
+category.stories.all() 
+     --is used to retrieve all stories that are associated with a specific category.
+my_story.categories.add(category1, category2) 
+    --is used to associate one or more categories with a specific story.

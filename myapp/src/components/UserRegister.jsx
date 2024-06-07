@@ -26,7 +26,9 @@ function UserRegister() {
       const response = await fetch('http://127.0.0.1/register', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+
+          
         },
         body: JSON.stringify(formData)
       });
@@ -44,21 +46,20 @@ function UserRegister() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className='formInput'>
-        <input type="text" name="name" placeholder="Name" />
-        <input type="email" name="email" placeholder="Email" />
-        <input type="password" name="password" placeholder="Password" />
-        <input type="text" name="phone" placeholder="Phone" />
-        <input type="text" name="address" placeholder="Address" />
-        <input type="text" name="city" placeholder="City" />
-        <input type="text" name="state" placeholder="State" />
-        <input type="text" name="zipcode" placeholder="Zipcode" />
-        <input type="text" name="country" placeholder="Country" />
-        <input type="text" name="gender" placeholder="Gender" />
-        <input type="text" name="hobbies" placeholder="Hobbies" />
-        <textarea name="about" placeholder="About"></textarea>
-        <input type="file" className='border ' name="image" />
-        <input type="text" name="role" placeholder="Role" />
+      <form onSubmit={handleSubmit} className='formInput rounded-lg shadow-xl ml-2'>
+        <input className='py-2 ml-0 rounded-lg focus:*:marker:bg-slate-50' type="text" name="name" placeholder="Name" />
+        <input className='py-2 ml-0 rounded-lg' type="email" name="email" placeholder="Email" />
+        <input className='py-2 ml-0 rounded-lg' type="password" name="password" placeholder="Password" />
+        <input className='py-2 ml-0 rounded-lg' type="text" name="phone" placeholder="Phone" />
+        <input className='py-2 ml-0 rounded-lg' type="text" name="address" placeholder="Address" />
+        <input className='py-2 ml-0 rounded-lg' type="text" name="city" placeholder="City" />
+        <input className='py-2 ml-0 rounded-lg' type="text" name="state" placeholder="State" />
+        <input className='py-2 ml-0 rounded-lg' type="text" name="zipcode" placeholder="Zipcode" />
+        <input className='py-2 ml-0 rounded-lg' type="text" name="country" placeholder="Country" />
+        <input className='py-2 ml-0 rounded-lg' type="text" name="gender" placeholder="Gender" />
+        <input className='py-2 ml-0 rounded-lg' type="text" name="hobbies" placeholder="Hobbies" />
+        <input className ='border-1 shadow-sm rounded-lg' type="file"  name="image" />
+        <input className ="text py-3 my-2 rounded-lg" type="text" name="role" placeholder="Role" />
         <button type="submit" className='submitButton'>Register</button>
       </form>
       {user && (

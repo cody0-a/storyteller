@@ -13,5 +13,39 @@
     .formLabel{
         @apply font-bold text-xl appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline
     }
+    .logo-animation {
+        display: inline-block;
+        animation: logo-move 5s ease-in-out infinite;
+      }
+      
+      .letter-animation {
+        display: inline-block;
+        animation: letter-twist 1s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      @keyframes logo-move {
+        0% {
+          transform: translateX(0);
+        }
+        50% {
+          transform: translateX(10px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+      
+      @keyframes letter-twist {
+        0% {
+          transform: rotate(0deg);
+        }
+        50% {
+          transform: rotate(10deg);
+        }
+        100% {
+          transform: rotate(0deg);
+        }
+      }
 
 }

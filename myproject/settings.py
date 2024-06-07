@@ -22,6 +22,7 @@ PHONENUMBER_DEFAULT_REGION = 'ET'
 INSTALLED_APPS = [
     'rest_framework',
     'myapp',
+    'corsheaders',
     'webpack_loader',
     'phonenumber_field',
     'account',
@@ -47,11 +48,14 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:3000').split(',')
 
 ROOT_URLCONF = 'myproject.urls'
 
@@ -74,7 +78,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
-
+AUTH_USER_MODEL = 'account.CustomUser'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -120,7 +124,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    os.path.join(FRONTEND_DIR, 'build'),
+    os.path.join(BASE_DIR, 'account', 'static'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
