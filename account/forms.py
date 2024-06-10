@@ -73,3 +73,45 @@ class StoryForm(forms.ModelForm):
         model = Story
         fields =['title', 'content']
         
+class PasswordChangeForm(forms.Form):
+    old_password = forms.CharField(label=_("Old password"), strip=False, widget=forms.PasswordInput)
+    new_password1 = forms.CharField(label=_("New password"), widget=forms.PasswordInput)
+    new_password2 = forms.CharField(label=_("New password confirmation"), strip=False, widget=forms.PasswordInput)
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 and password2 and password1 != password2:
+            raise ValidationError("Passwords don't match")
+        return password2
+
+    def save(self, commit=True):
+        password = self.cleaned_data["new_password1"]
+        self.user.set_password(password)
+        if commit:
+            self.user.save()
+        return self.user    
+
+class PasswordResetForm(forms.Form):
+    email = forms.EmailField(label=_("Email"), max_length=254)  
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        if not User.objects.filter(email=email).exists():
+            raise ValidationError("There is no user registered with the specified email address.")
+        return email
+
+    def save(self, domain_override=None, email=None, **kwargs):
+        email = self.cleaned_data["email"]
+        email_field_name = User.get_email_field_name()
+        for user in User.objects.filter(**{email_field_name: email}):
+            user.set_password(self.cleaned_data["new_password1"])
+            user.save()
+
+
+        return user
+    

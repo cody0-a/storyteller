@@ -3,6 +3,8 @@ import './input.css'
 import './index.css'
 import Navbar from './components/Navbar';
 import Layout from './components/layout';
+import PhoneVerifier from './components/PhoneVerifier';
+import  Notifications from './components/Notifications';
 const user = {
   name: 'John Doe',
   role: 'Software Engineer',
@@ -21,6 +23,8 @@ function App() {
       <div className="h-[calc(100vh)] overflow-auto">
         <Layout />
       </div>  
+      <PhoneVerifier />
+      <Notifications />
     </div>
   );
 }

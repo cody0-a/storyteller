@@ -1,6 +1,5 @@
 import React from 'react';
 import { FaHome, FaUserCircle, FaBookOpen, FaCog } from 'react-icons/fa';
-
 const Layout = () => {
   return (
     <div className="flex">
@@ -54,7 +53,7 @@ const MainContent = () => {
         Lord of The Rings , Harry Potter are really good read ( just trust me , the movies didn’t do they justice ) . 451 Fahrenheit , The adventures of Huckleberry Finn is also really good if you looking for a one book run . Finally , Scaramouche is good from my memory ( I read it in 2016 , when I was 13 ) 
         so if anyone could confirm me about this that would be great
       </p>
-      {/* Add more content here */}
+   
       <div style={{ height: '160vh' }}>
         {/* Add more content to make the main content scrollable */}
       </div>
