@@ -14,6 +14,8 @@ urlpatterns = [
     path('logout/',views.logout_user, name='logout_user'),
     path('reset_password/',views.reset_password, name='reset_password'),
     path('change_password/',views.change_password, name='change_password'),
+     path('api/share-story/', views.ShareStoryView.as_view(), name='share-story'),
+    path('api/share-comment/', views.ShareCommentView.as_view(), name='share-comment'),
      path('notifications/', views.NotificationListView.as_view(), name='notification-list'),
     path('notifications/<int:id>/', views.NotificationUpdateView.as_view(), name='notification-update'),
 ]

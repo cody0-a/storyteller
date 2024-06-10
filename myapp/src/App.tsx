@@ -1,32 +1,42 @@
 import React from 'react';
-import './input.css'
-import './index.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './components/Login';
+import Navigation from './components/Navigation';
+import PrivateRoute from './components/PrivateRoute';
+import UserProfile from './components/UserProfile';
+import UserRegister from './components/UserRegister';
 import Navbar from './components/Navbar';
 import Layout from './components/layout';
-import PhoneVerifier from './components/PhoneVerifier';
-import  Notifications from './components/Notifications';
-const user = {
-  name: 'John Doe',
-  role: 'Software Engineer',
-  avatar: 'https://example.com/avatar.jpg',
-  email: 'john.doe@example.com',
-  location: 'New York, USA',
-  phone: '+1 (123) 456-7890',
-  githubUrl: 'https://github.com/johndoe',
-  linkedinUrl: 'https://www.linkedin.com/in/johndoe'
-};
 
-function App() {
-  return (
-    <div className="w-full bg-gray-700 text-white font-sans my-[.5px] h overflow-hidden overflow-y-autoh-screen">
-      <Navbar />
-      <div className="h-[calc(100vh)] overflow-auto">
-        <Layout />
-      </div>  
-      <PhoneVerifier />
-      <Notifications />
-    </div>
-  );
-}
+const App: React.FC = () => {
+    return (
+      <div className='min-h-screen bg-black text-white '>
+        <nav>
+          <ul>
+            <Navbar />
+            <Layout />
+          </ul>
+        </nav>
+      <Router>
+            <div>
+                <Navigation />
+                <Routes>
+
+                    <Route path="/register" element={<UserRegister />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route
+                        path="/profile"
+                        element={
+                            <PrivateRoute>
+                                <UserProfile key="profile" user={undefined} />
+                            </PrivateRoute>
+                        }
+                    />
+                </Routes>
+            </div>
+        </Router>
+</div>
+    );
+};
 
 export default App;

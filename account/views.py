@@ -3,11 +3,17 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from rest_framework.decorators import api_view
+from rest_framework.authtoken.models import Token
 from django.http import JsonResponse
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from .forms import *
+import channels
+from .serializers import *
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import UserCreationForm, LoginForm, ChangeEmailForm, StoryForm, StoryCommentForm
-from .models import UserProfile, Story, StoryComment, StoryLike, StoryCommentLike, StoryShare, User
+from .models import *
 
 def index(request):
     return render(request, 'account/index.html')
@@ -30,21 +36,16 @@ def register(request):
         form = UserCreationForm()
         return render(request, 'account/register.html', {'form': form})
 
-def login_user(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        users = User.objects.get(username=username)
-        if user is not None:
-            login(request, user)
-            user_profile = UserProfile.objects.get(user=user)
-            return JsonResponse({'user': users.username, 'profile': user_profile})
-        else:
-            return JsonResponse({'error': 'Invalid username or password'}, status=401)
+@api_view(['POST'])
+def login_view(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        token, created = Token.objects.get_or_create(user=user)
+        return JsonResponse({'token': token.key})
     else:
-        loginform = LoginForm()
-        return render(request, 'account/login.html', {'loginform': loginform})
+        return JsonResponse({'error': 'Invalid credentials'}, status=400)
 
 @login_required
 def logout_user(request):
@@ -208,10 +209,19 @@ def share_story(request, story_id):
         for user_id in user_ids:
             try:
                 user = User.objects.get(pk=user_id)
-                StoryShare.objects.create(story=story, user=user, shared_by=request.user)
+                SharedStory.objects.create(story=story, user=user, shared_by=request.user)
             except User.DoesNotExist:
                 pass
         messages.success(request, f"Story '{story.title}' has been shared.")
         return redirect('account:story_detail', story_id=story.id)
     users = User.objects.exclude(pk=request.user.pk)
     return render(request, 'account/share_story.html', {'story': story, 'users': users})
+class ShareStoryView(generics.CreateAPIView):
+    queryset = SharedStory.objects.all()
+    serializer_class = SharedStorySerializer
+    permission_classes = [IsAuthenticated]
+
+class ShareCommentView(generics.CreateAPIView):
+    queryset = SharedComment.objects.all()
+    serializer_class = SharedCommentSerializer
+    permission_classes = [IsAuthenticated]

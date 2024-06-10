@@ -1,71 +1,64 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const Login= () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Login = () => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle login logic here
-    console.log('Email:', email);
-    console.log('Password:', password);
-  };
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('/api/login/', { username, password });
+            if (response.data.token) {
+                
+                localStorage.setItem('token', response.data.token);
+                
+                navigate('/profile');
+            } else {
+                setError('Invalid username or password');
+            }
+        } catch (err) {
+            setError('An error occurred during login. Please try again.');
+        }
+    };
 
-  return (
-    <div className="flex justify-center items-center h-screen bg-gray-900">
-      <div className="bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4 text-white">Login</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              className="block text-gray-400 font-bold mb-2"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <input
-              className="shadow appearance-none border-none rounded w-full py-2 px-3 bg-gray-700 text-gray-400 leading-tight focus:outline-none focus:shadow-outline focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              className="block text-gray-400 font-bold mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              className="shadow appearance-none border-none border rounded w-full py-2 px-3 bg-gray-700 text-gray-400 mb-3 leading-tight focus:outline-none focus:shadow-outline focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <button
-              className="bg-blue-500  hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            >
-              Sign In
-            </button>
-            <a
-              className="inline-block  align-baseline font-bold text-sm text-blue-500 hover:text-blue-400"
-              href="#"
-            >
-              Forgot Password?
-            </a>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+    return (
+        <div className="max-w-md mx-auto mt-10">
+            <h1 className="text-2xl font-bold mb-4">Login</h1>
+            <form onSubmit={handleLogin}>
+                <div className="mb-4">
+                    <label className="block mb-2">Username</label>
+                    <input
+                        type="text"
+                        className="w-full p-2 border border-gray-300 rounded"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block mb-2">Password</label>
+                    <input
+                        type="password"
+                        className="w-full p-2 border border-gray-300 rounded"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                {error && <p className="text-red-500 mb-4">{error}</p>}
+                <button
+                    type="submit"
+                    className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                    Login
+                </button>
+            </form>
+        </div>
+    );
 };
 
 export default Login;

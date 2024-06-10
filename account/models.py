@@ -132,6 +132,14 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+class StoryComment(models.Model):
+    story = models.ForeignKey(Story, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    comment_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.author.username} - {self.story.title}"
 class StoryLike(models.Model):
     story = models.ForeignKey(Story, on_delete=models.CASCADE, related_name='likes')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -148,7 +156,7 @@ class StoryCommentLike(models.Model):
     class Meta:
         unique_together = ('story_comment', 'user')
 
-class StoryShare(models.Model):
+class SharedStory(models.Model):
     story = models.ForeignKey(Story, on_delete=models.CASCADE, related_name='shared_stories')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_shared_stories')
     shared_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='shared_stories')
